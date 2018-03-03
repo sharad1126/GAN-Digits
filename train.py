@@ -12,6 +12,8 @@ import visdom
 DATA_FOLDER = './torch_data/VGAN/MNIST'
 use_gpu = torch.cuda.is_available()
 
+BATCH_SIZE = 100
+
 def mnist_data():
     compose = transforms.Compose(
         [
@@ -23,7 +25,7 @@ def mnist_data():
     return datasets.MNIST(root=out_dir, train=True, transform=compose, download=True)
 
 data = mnist_data()
-data_loader = torch.utils.data.DataLoader(data, batch_size=2, shuffle=True)
+data_loader = torch.utils.data.DataLoader(data, batch_size=BATCH_SIZE, shuffle=True)
 num_batches = len(data_loader)
 
 """
