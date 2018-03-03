@@ -81,6 +81,7 @@ Setup plotter helpers
 """
 vis = visdom.Visdom()
 loss_win = "loss_win"
+images_win = "images_win"
 loss_plot_initiated = False
 """
 function to train generator
@@ -149,4 +150,4 @@ for epoch in range(NUM_EPOCHS):
                         )
 
             # Plot images
-            vis.images(generated_sample)
+            vis.images(generated_sample, win=images_win)
