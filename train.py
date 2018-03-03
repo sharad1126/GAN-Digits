@@ -145,3 +145,6 @@ for epoch in range(NUM_EPOCHS):
                         win=loss_win,
                         update="append"
                         )
+
+            # Plot images
+            vis.images(generated_sample)
