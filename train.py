@@ -6,7 +6,8 @@ from torch.autograd.variable import Variable
 from networks import Discriminator, Generator
 from utils import noise, images_to_vectors, vectors_to_images
 from utils import real_data_target, fake_data_target
-
+import numpy as np
+import visdom
 
 DATA_FOLDER = './torch_data/VGAN/MNIST'
 use_gpu = torch.cuda.is_available()
@@ -22,7 +23,7 @@ def mnist_data():
     return datasets.MNIST(root=out_dir, train=True, transform=compose, download=True)
 
 data = mnist_data()
-data_loader = torch.utils.data.DataLoader(data, batch_size=100, shuffle=True)
+data_loader = torch.utils.data.DataLoader(data, batch_size=2, shuffle=True)
 num_batches = len(data_loader)
 
 """
@@ -72,6 +73,13 @@ def train_discriminator(optimizer, real_data, fake_data):
     optimizer.step()
     return error_real + error_fake, prediction_real, prediction_fake
 
+
+"""
+Setup plotter helpers
+"""
+vis = visdom.Visdom()
+loss_win = "loss_win"
+loss_plot_initiated = False
 """
 function to train generator
 """
@@ -122,3 +130,18 @@ for epoch in range(NUM_EPOCHS):
             generated_sample = vectors_to_images(fake_data[:num_samples], (28, 28)).data.cpu()
             print(generated_sample.shape)
             print(d_error.data[0], g_error.data[0], epoch, n_batch, num_batches)
+            current_time = epoch+(float(n_batch)/num_batches)
+            if not loss_plot_initiated:
+                vis.line(
+                        Y=np.array([d_error.data[0], g_error.data[0]]).reshape(1, 2),
+                         X=np.array([current_time]),
+                        win=loss_win,
+                        )
+                loss_plot_initiated = True
+            else:
+                vis.line(
+                        Y=np.array([d_error.data[0], g_error.data[0]]).reshape(1, 2),
+                         X=np.array([current_time]),
+                        win=loss_win,
+                        update="append"
+                        )
