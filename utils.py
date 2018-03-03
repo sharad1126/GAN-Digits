@@ -19,3 +19,16 @@ def vectors_to_images(vector, shape):
     """
     assert len(shape) == 2
     return vector.view(vector.size(0), 1, shape[0], shape[1])
+
+"""
+Data templates
+"""
+def real_data_target(size, use_gpu):
+    data = Variable(torch.ones(size, 1))
+    if use_gpu: return data.cuda()
+    return data
+
+def fake_data_target(size):
+    data = Variable(torch.zeros(size, 1))
+    if use_gpu: return data.cuda()
+    return data
