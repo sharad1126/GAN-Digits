@@ -4,7 +4,6 @@ import torch
 from torchvision import transforms, datasets
 
 DATA_FOLDER = './torch_data/VGAN/MNIST'
-torch.set_default_tensor_type('torch.cuda.FloatTensor')
 use_gpu = torch.cuda.is_available()
 
 def mnist_data():
