@@ -2,6 +2,7 @@
 
 import torch
 from torchvision import transforms, datasets
+from networks import Discriminator, Generator
 
 DATA_FOLDER = './torch_data/VGAN/MNIST'
 use_gpu = torch.cuda.is_available()

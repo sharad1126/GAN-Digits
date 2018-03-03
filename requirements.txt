@@ -1,9 +1,17 @@
 certifi==2018.1.18
 cffi==1.11.4
+chardet==3.0.4
+idna==2.6
 numpy==1.14.1
 olefile==0.45.1
 Pillow==5.0.0
 pycparser==2.18
+pyzmq==17.0.0
+requests==2.18.4
 six==1.11.0
 torch==0.3.1.post2
+torchfile==0.1.0
 torchvision==0.2.0
+tornado==4.5.3
+urllib3==1.22
+visdom==0.1.7
