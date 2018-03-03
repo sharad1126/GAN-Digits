@@ -70,3 +70,20 @@ def train_discriminator(optimizer, real_data, fake_data):
 
     optimizer.step()
     return error_real + error_fake, prediction_real, prediction_fake
+
+"""
+function to train generator
+"""
+def train_generator(optimizer, fake_data):
+    # Reset gradients
+    optimizer.zero_grad()
+
+    # Predict
+    prediction = discriminator(fake_data)
+    # Compute loss
+    error = loss(prediction, real_data_target(prediction.size(0)))
+    # Compute gradients
+    error.backward()
+
+    optimizer.step()
+    return error
