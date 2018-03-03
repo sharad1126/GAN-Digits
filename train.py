@@ -20,5 +20,8 @@ data = mnist_data()
 data_loader = torch.utils.data.DataLoader(data, batch_size=100, shuffle=True)
 num_batches = len(data_loader)
 
+"""
+# Test if dataloader is working fine
 for images, labels in data_loader:
     print(images.shape, labels.shape)
+"""
