@@ -1,5 +1,6 @@
 import torch
 import math
+from torch.autograd.variable import Variable
 
 def noise(size):
     n = Variable(torch.randn(size, 100))
@@ -23,12 +24,12 @@ def vectors_to_images(vector, shape):
 """
 Data templates
 """
-def real_data_target(size, use_gpu):
+def real_data_target(size, use_gpu=True):
     data = Variable(torch.ones(size, 1))
     if use_gpu: return data.cuda()
     return data
 
-def fake_data_target(size):
+def fake_data_target(size, use_gpu=True):
     data = Variable(torch.zeros(size, 1))
     if use_gpu: return data.cuda()
     return data

@@ -2,6 +2,7 @@
 
 import torch
 from torchvision import transforms, datasets
+from torch.autograd.variable import Variable
 from networks import Discriminator, Generator
 from utils import noise, images_to_vectors, vectors_to_images
 from utils import real_data_target, fake_data_target
@@ -59,13 +60,13 @@ def train_discriminator(optimizer, real_data, fake_data):
     # Train on real data
     prediction_real = discriminator(real_data)
     # Calculate error and back propagate
-    error_real = loss(prediction_real, real_data_target(real_data.size(0)))
+    error_real = loss(prediction_real, real_data_target(real_data.size(0), use_gpu=use_gpu))
     error_real.backward()
 
     # Train on fake data
     prediction_fake = discriminator(fake_data)
     # Calculate error and back propagate
-    error_fake = loss(prediction_fake, fake_data_target(fake_data.size(0)))
+    error_fake = loss(prediction_fake, fake_data_target(fake_data.size(0), use_gpu=use_gpu))
     error_fake.backward()
 
     optimizer.step()
@@ -81,9 +82,43 @@ def train_generator(optimizer, fake_data):
     # Predict
     prediction = discriminator(fake_data)
     # Compute loss
-    error = loss(prediction, real_data_target(prediction.size(0)))
+    error = loss(prediction, real_data_target(prediction.size(0), use_gpu=use_gpu))
     # Compute gradients
     error.backward()
 
     optimizer.step()
     return error
+
+"""
+Actual training
+"""
+
+for epoch in range(NUM_EPOCHS):
+    for n_batch, (real_batch, _) in enumerate(data_loader):
+
+        real_data = Variable(images_to_vectors(real_batch))
+        if use_gpu: real_data = real_data.cuda()
+
+        # Note: the .detach() call detaches the generator from the
+        # compute graph. Important for proper computation of
+        # gradients in a case like this when training multiple
+        # networks as the same time.
+        # Reference : https://discuss.pytorch.org/t/how-does-detach-work/2308
+        #
+        # This was a **fucking** headache to figure out !!!!!!!!!!!!!!!!!!!!!!
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        fake_data = generator(noise(real_data.size(0))).detach()
+
+        # train Discriminator
+        d_error, d_pred_real, d_pred_fake = train_discriminator(d_optimizer, real_data, fake_data)
+
+        # Train Generator
+        fake_data = generator(noise(real_batch.size(0)))
+        g_error = train_generator(g_optimizer, fake_data)
+
+        if n_batch % 100 == 0:
+            time = epoch + n_batch*1.0/len(data_loader)
+            num_samples = 64
+            generated_sample = vectors_to_images(fake_data[:num_samples], (28, 28)).data.cpu()
+            print(generated_sample.shape)
+            print(d_error.data[0], g_error.data[0], epoch, n_batch, num_batches)
