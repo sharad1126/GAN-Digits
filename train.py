@@ -3,6 +3,7 @@
 import torch
 from torchvision import transforms, datasets
 from networks import Discriminator, Generator
+from utils import noise
 
 DATA_FOLDER = './torch_data/VGAN/MNIST'
 use_gpu = torch.cuda.is_available()
@@ -26,3 +27,15 @@ num_batches = len(data_loader)
 for images, labels in data_loader:
     print(images.shape, labels.shape)
 """
+discriminator = Discriminator()
+generator = Generator()
+
+if use_gpu:
+    discriminator = discriminator.cuda()
+    generator = generator.cuda()
+
+"""
+Instantiate optimizers
+"""
+d_optimizer = torch.optim.Adam(discriminator.parameters(), lr=0.0001)
+g_optimizer = torch.optim.Adam(generator.parameters(), lr=0.0001)
