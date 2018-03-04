@@ -25,4 +25,4 @@ then at `http://localhost:8097/` you should start seeing the plots.
 ![loss_plots](images/loss_plots.png)
 
 # Author
-Sharad Agarwal <sharada.agarwal@cern.ch>
+Sharad Agarwal <sharad.agarwal@cern.ch>
