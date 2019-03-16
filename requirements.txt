@@ -4,7 +4,7 @@ chardet==3.0.4
 idna==2.6
 numpy==1.16.2
 olefile==0.45.1
-Pillow==5.0.0
+Pillow==5.4.1
 pycparser==2.18
 pyzmq==17.0.0
 requests==2.20.0
