@@ -1,5 +1,5 @@
 certifi==2018.1.18
-cffi==1.11.4
+cffi==1.12.2
 chardet==3.0.4
 idna==2.6
 numpy==1.16.2
