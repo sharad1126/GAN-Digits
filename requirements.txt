@@ -13,5 +13,5 @@ torch==1.0.1.post2
 torchfile==0.1.0
 torchvision==0.2.2
 tornado==6.0.1
-urllib3==1.24.1
+urllib3==1.25
 visdom==0.1.8.8
